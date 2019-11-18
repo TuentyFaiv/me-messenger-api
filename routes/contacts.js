@@ -52,7 +52,7 @@ function contactsApi(app) {
     scopesValidationHandler(['read:contacts']),
     validationHandler({ contactId: contactIdSchema }, 'params'),
     async function (req, res, next) {
-      cacheResponse(req, SIXTY_MINUTES_IN_SECONDS);
+      cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
       const { contactId } = req.params;
       try {
         const contacts = await contactsService.getContact({ contactId });
