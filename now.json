@@ -1,0 +1,26 @@
+{
+  "name": "kiin-api",
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.js"
+    }
+  ],
+  "env": {
+    "CORS": "*",
+    "DB_USER": "@kiin-db-user",
+    "DB_PASSWORD": "@kiin-db-password",
+    "DB_HOST": "@kiin-db-host",
+    "DB_NAME": "@kiin-db-name",
+    "AUTH_JWT_SECRET": "@kiin-auth-jwt-secret",
+    "PUBLIC_API_KEY_TOKEN": "@kiin-public-api-key-token",
+    "ADMIN_API_KEY_TOKEN": "@kiin-admin-api-key-token"
+  }
+}
