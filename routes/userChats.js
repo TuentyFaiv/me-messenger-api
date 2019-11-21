@@ -13,54 +13,32 @@ const scopesValidationHandler = require('../utils/middleware/scopesValidationHan
 
 const cacheResponse = require('../utils/cacheResponse');
 const {
-  FIVE_MINUTES_IN_SECONDS,
   SIXTY_MINUTES_IN_SECONDS,
 } = require('../utils/time');
 
 //JWT strategy
 require('../utils/auth/strategies/jwt');
 
-function chatsApi(app) {
+function userChatsApi(app) {
   const router = express.Router();
-  app.use("/api/chats", router);
+  app.use("/api/chats/user", router);
 
   const chatsService = new ChatsService();
 
   router.get(
-    "/",
+    "/:userId",
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:chats']),
-    async function (req, res, next) {
-      cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
-      const { userId } = req.query;
-
-      try {
-        const chats = await chatsService.getChats({ userId });
-
-        res.status(200).json({
-          data: chats,
-          message: 'chats listed'
-        });
-      } catch (error) {
-        next(error);
-      }
-    }
-  );
-
-  router.get(
-    "/:chatId",
-    passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:chats']),
+    scopesValidationHandler(['read:user-chats']),
     async function (req, res, next) {
       cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
-      const { chatId } = req.params;
+      const { userId } = req.params;
 
       try {
-        const chat = await chatsService.getChat({ chatId });
+        const chatsOfUser = await chatsService.getChats({ userId });
 
         res.status(200).json({
-          data: chat,
-          message: 'chat retrieved'
+          data: chatsOfUser,
+          message: 'chat of user retrieved'
         });
       } catch (error) {
         next(error);
@@ -71,7 +49,7 @@ function chatsApi(app) {
   router.post(
     "/",
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['create:chats']),
+    scopesValidationHandler(['create:user-chats']),
     validationHandler(createChatSchema),
     async function (req, res, next) {
       const { body: chat } = req;
@@ -90,18 +68,18 @@ function chatsApi(app) {
   );
 
   router.put(
-    '/:chatId',
+    '/:userChatId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['update:chats']),
-    validationHandler({ chatId: chatIdSchema }, 'params'),
+    scopesValidationHandler(['update:user-chats']),
+    validationHandler({ userChatId: chatIdSchema }, 'params'),
     validationHandler(updateChatSchema),
     async function (req, res, next) {
-      const { chatId } = req.params;
+      const { userChatId } = req.params;
       const { body: chat } = req;
 
       try {
         const updatedChatId = await chatsService.updateChat({
-          chatId,
+          chatId: userChatId,
           chat
         });
         res.status(200).json({
@@ -115,19 +93,23 @@ function chatsApi(app) {
   );
 
   router.delete(
-    "/:chatId",
+    '/:userChatId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['delete:chats']),
-    validationHandler({ chatId: chatIdSchema }),
+    scopesValidationHandler(['delete:user-chats']),
+    validationHandler({ userChatId: chatIdSchema }, 'params'),
+    validationHandler(updateChatSchema),
     async function (req, res, next) {
-      const { chatId } = req.params;
+      const { userChatId } = req.params;
+      const { body: chat } = req;
 
       try {
-        const deletedChat = await chatsService.deleteChat({ chatId });
-
+        const updatedChatId = await chatsService.updateChat({
+          chatId: userChatId,
+          chat
+        });
         res.status(200).json({
-          data: deletedChat,
-          message: 'chat deleted'
+          data: updatedChatId,
+          message: 'chat of user deleted'
         });
       } catch (error) {
         next(error);
@@ -136,4 +118,4 @@ function chatsApi(app) {
   );
 }
 
-module.exports = chatsApi;
+module.exports = userChatsApi;

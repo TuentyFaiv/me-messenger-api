@@ -7,7 +7,10 @@ const { config } = require('./config/index');
 const authApi = require('./routes/auth');
 const chatsApi = require('./routes/chats');
 const contactsApi = require('./routes/contacts');
+const contactsUserApi = require('./routes/contactsUser');
 const messagesApi = require('./routes/messages');
+const messagesChatApi = require('./routes/messagesChats');
+const userChatsApi = require('./routes/userChats');
 
 const {
   logErrors,
@@ -23,8 +26,11 @@ app.use(helmet());
 //routes
 authApi(app);
 contactsApi(app);
+contactsUserApi(app);
 chatsApi(app);
+userChatsApi(app);
 messagesApi(app);
+messagesChatApi(app);
 
 //Catch 404
 app.use(notFoundHandler);

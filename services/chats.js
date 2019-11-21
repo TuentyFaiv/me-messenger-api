@@ -6,10 +6,10 @@ class ChatsService {
     this.mongoDB = new MongoLib();
   }
 
-  async getChats({ tags }) {
-    const query = tags && { tags: { $in: tags } };
-    const movies = await this.mongoDB.getAll(this.collection, query);
-    return movies || [];
+  async getChats({ userId }) {
+    const query = userId && { members: { $eq: userId.toString() } };
+    const chats = await this.mongoDB.getAll(this.collection, query);
+    return chats || [];
   }
 
   async getChat({ chatId }) {

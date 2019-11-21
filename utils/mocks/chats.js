@@ -1,6 +1,5 @@
 const chatsMock = [{
   title: "Aridatha Laurent",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "e249dc5a-3f75-4757-87c0-c0062950abde",
     "2bad6bab-3096-49a8-8c07-daf94df7dea4"],
@@ -18,7 +17,6 @@ const chatsMock = [{
   updated_at: "8/4/2019"
 }, {
   title: "Marje Willimott",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "0d1e1720-8198-463b-a59c-dfb87a428024",
     "e85d6d9c-2015-41f8-b899-bb5e259d8cb8",
@@ -40,7 +38,6 @@ const chatsMock = [{
   updated_at: "11/23/2018"
 }, {
   title: "Hilary Leverentz",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "5f0a9786-6fee-404f-996f-9961cae53295",
     "bf772afd-019e-41e9-9262-c1a1286a927b",
@@ -59,7 +56,6 @@ const chatsMock = [{
   updated_at: "1/20/2019"
 }, {
   title: "Henderson Hostan",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "9ab85abf-3524-41fc-bac3-b729f485428d",
     "cab58058-ccc5-4050-9374-c1967414a14b",
@@ -78,7 +74,6 @@ const chatsMock = [{
   updated_at: "4/27/2019"
 }, {
   title: "Rora Stathor",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "a9636058-7807-4c91-9897-e8747041417b",
     "93729697-4187-4857-8fe8-6313257dcdea",
@@ -96,7 +91,6 @@ const chatsMock = [{
   updated_at: "11/18/2018"
 }, {
   title: "Maryanna Loughrey",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "d79a12ff-cae1-4a92-81b2-53eecb10c828",
     "57a6c352-45b3-4682-a079-782daf02a4c3",
@@ -115,7 +109,6 @@ const chatsMock = [{
   updated_at: "11/26/2018"
 }, {
   title: "Dione MacCaghan",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "eaba09f0-61f3-4ab1-957b-c34ea88ad486",
     "960156ac-58bf-4e40-a9ba-fde5f3fd929f",
@@ -132,7 +125,6 @@ const chatsMock = [{
   updated_at: "7/12/2019"
 }, {
   title: "Katti Ivison",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "c85ce34b-ba0e-4b04-8670-b6a7bae9dcf4",
     "9f98a387-1772-427e-bdfc-4ebd92bf81fe",
@@ -152,7 +144,6 @@ const chatsMock = [{
   updated_at: "6/23/2019"
 }, {
   title: "Ally Wyd",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "5d22d905-ef5f-492d-8c64-7a20561b4445",
     "f71a03aa-566d-4677-afef-920376687594"],
@@ -173,7 +164,6 @@ const chatsMock = [{
   updated_at: "6/15/2019"
 }, {
   title: "Barnabe Budibent",
-  chatOf: "5dc33f3be540f30b8e8685e2",
   members: [
     "a259bac9-02d9-477b-ac38-7b988211b81d",
     "988e97f5-b448-44dd-934e-2d2dc64d88c6"],

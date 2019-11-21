@@ -6,8 +6,8 @@ class ContactsService {
     this.mongoDB = new MongoLib();
   }
 
-  async getContacts({ tags }) {
-    const query = tags && { tags: { $in: tags } };
+  async getContacts({ contactOf }) {
+    const query = contactOf && { contactOf };
     const contacts = await this.mongoDB.getAll(this.collection, query);
     return contacts || [];
   }
@@ -34,6 +34,12 @@ class ContactsService {
   async deleteContact({ contactId }) {
     const deleteContactId = await this.mongoDB.delete(this.collection, contactId);
     return deleteContactId;
+  }
+
+  async searchUser({ email }) {
+    const query = email && { email };
+    const userForContact = await this.mongoDB.getAll('users', query);
+    return userForContact || [];
   }
 }
 

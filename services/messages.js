@@ -6,8 +6,8 @@ class MessagesService {
     this.mongoDB = new MongoLib();
   }
 
-  async getMessages({ tags }) {
-    const query = tags && { tags: { $in: tags } };
+  async getMessages({ inChat }) {
+    const query = inChat && { inChat };
     const messages = await this.mongoDB.getAll(this.collection, query);
     return messages || [];
   }

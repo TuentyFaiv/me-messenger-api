@@ -20,25 +20,30 @@ const {
 //JWT strategy
 require('../utils/auth/strategies/jwt');
 
-function contactsApi(app) {
+function contactsUserApi(app) {
   const router = express.Router();
-  app.use('/api/contacts', router);
+  app.use('/api/contacts/user', router);
 
   const contactsService = new ContactsService();
 
   router.get(
-    '/',
+    "/search",
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:contacts']),
+    scopesValidationHandler(['read:user-contacts']),
     async function (req, res, next) {
       cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
-      const { contactOf } = req.query;
+      const { email } = req.query;
       try {
-        const contacts = await contactsService.getContacts({ contactOf });
+        const searchContacts = await contactsService.searchUser({ email });
+        const users = searchContacts.map(user => ({
+          id: user._id,
+          name: user.name,
+          email: user.email
+        }));
 
         res.status(200).json({
-          data: contacts,
-          message: 'contacts listed'
+          data: users,
+          message: 'contacts searched'
         });
       } catch (error) {
         next(error);
@@ -47,19 +52,19 @@ function contactsApi(app) {
   );
 
   router.get(
-    '/:contactId',
+    "/:contactOf",
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:contacts']),
-    validationHandler({ contactId: contactIdSchema }, 'params'),
+    scopesValidationHandler(['read:user-contacts']),
     async function (req, res, next) {
       cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
-      const { contactId } = req.params;
+      const { contactOf } = req.params;
+
       try {
-        const contacts = await contactsService.getContact({ contactId });
+        const contactsOfUser = await contactsService.getContacts({ contactOf });
 
         res.status(200).json({
-          data: contacts,
-          message: 'contact retrieved'
+          data: contactsOfUser,
+          message: 'contacts of user retrieved'
         });
       } catch (error) {
         next(error);
@@ -70,7 +75,7 @@ function contactsApi(app) {
   router.post(
     '/',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['create:contacts']),
+    scopesValidationHandler(['create:user-contacts']),
     validationHandler(createContactSchema),
     async function (req, res, next) {
       const { body: contact } = req;
@@ -90,7 +95,7 @@ function contactsApi(app) {
   router.put(
     '/:contactId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['update:contacts']),
+    scopesValidationHandler(['update:user-contacts']),
     validationHandler({ contactId: contactIdSchema }, 'params'),
     validationHandler(updateContactSchema),
     async function (req, res, next) {
@@ -116,7 +121,7 @@ function contactsApi(app) {
   router.delete(
     '/:contactId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['delete:contacts']),
+    scopesValidationHandler(['delete:user-contacts']),
     validationHandler({ contactId: contactIdSchema }, 'params'),
     async function (req, res, next) {
       const { contactId } = req.params;
@@ -135,4 +140,4 @@ function contactsApi(app) {
   );
 }
 
-module.exports = contactsApi;
+module.exports = contactsUserApi;

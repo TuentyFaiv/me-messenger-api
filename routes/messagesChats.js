@@ -13,53 +13,32 @@ const scopesValidationHandler = require('../utils/middleware/scopesValidationHan
 
 const cacheResponse = require('../utils/cacheResponse');
 const {
-  FIVE_MINUTES_IN_SECONDS,
   SIXTY_MINUTES_IN_SECONDS
 } = require('../utils/time');
 
 //JWT strategy
 require('../utils/auth/strategies/jwt');
 
-function messageApi(app) {
+function messageChatApi(app) {
   const router = express.Router();
-  app.use('/api/messages', router);
+  app.use('/api/messages/chat', router);
 
   const messagesService = new MessagesService();
 
   router.get(
-    '/',
+    "/:inChat",
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:messages']),
-    async function (req, res, next) {
-      cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
-      const { inChat } = req.query;
-      try {
-        const messages = await messagesService.getMessages({ inChat });
-        res.status(200).json({
-          data: messages,
-          message: 'messages listed'
-        });
-      } catch (error) {
-        next(error);
-      }
-    }
-  );
-
-  router.get(
-    '/:messageId',
-    passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['read:messages']),
-    validationHandler({ messageId: messageIdSchema }, 'params'),
+    scopesValidationHandler(['read:user-messages']),
     async function (req, res, next) {
       cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
-      const { messageId } = req.params;
+      const { inChat } = req.params;
 
       try {
-        const message = await messagesService.getMessage({ messageId });
+        const messagesOfChat = await messagesService.getMessages({ inChat });
 
         res.status(200).json({
-          data: message,
-          message: 'message retrieved'
+          data: messagesOfChat,
+          message: 'messages of chat retrieved'
         });
       } catch (error) {
         next(error);
@@ -70,7 +49,7 @@ function messageApi(app) {
   router.post(
     '/',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['create:messages']),
+    scopesValidationHandler(['create:user-messages']),
     validationHandler(createMessageSchema),
     async function (req, res, next) {
       const { body: message } = req;
@@ -90,7 +69,7 @@ function messageApi(app) {
   router.put(
     '/:messageId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['update:messages']),
+    scopesValidationHandler(['update:user-messages']),
     validationHandler({ messageId: messageIdSchema }, 'params'),
     validationHandler(updateMessageSchema),
     async function (req, res, next) {
@@ -114,7 +93,7 @@ function messageApi(app) {
   router.delete(
     '/:messageId',
     passport.authenticate('jwt', { session: false }),
-    scopesValidationHandler(['delete:messages']),
+    scopesValidationHandler(['delete:user-messages']),
     validationHandler({ messageId: messageIdSchema }),
     async function (req, res, next) {
       const { messageId } = req.params;
@@ -132,4 +111,4 @@ function messageApi(app) {
   );
 }
 
-module.exports = messageApi;
+module.exports = messageChatApi;
